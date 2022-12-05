@@ -1,0 +1,12 @@
+GEM
+  specs:
+    msgpack (1.5.1)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  msgpack
+
+BUNDLED WITH
+   2.3.5
