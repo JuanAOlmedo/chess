@@ -4,6 +4,10 @@ class Piece
     attr_accessor :position
     attr_reader :movement_map, :color
 
+    def show_highlighted
+        show.red
+    end
+
     def save
         [self.class.name, color]
     end
@@ -92,9 +96,15 @@ class Knight < Piece
 end
 
 class Pawn < Piece
+    attr_reader :kill_movement_map
+
     def initialize(color)
         @color = color
         @movement_map = MovementMap.new([[0, 1]], false, self)
+    end
+
+    def kill_movement_map
+        MovementMap.new([[1, 1], [-1, 1]], false, self)
     end
 
     def show
@@ -102,13 +112,9 @@ class Pawn < Piece
     end
 end
 
-class UnmovedPawn < Piece
+class UnmovedPawn < Pawn
     def initialize(color)
         @color = color
         @movement_map = MovementMap.new([[0, 1], [0, 2]], false, self)
-    end
-
-    def show
-        color == :white ? '♙' : "\u265F"
     end
 end

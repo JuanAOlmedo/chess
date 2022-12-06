@@ -13,7 +13,7 @@ class Path
     end
 
     def calculate_positions
-        return unless movement[0] == movement[1] || movement.include?(0)
+        return unless movement[0].abs == movement[1].abs || movement.include?(0)
 
         max = movement.map(&:abs).max
 

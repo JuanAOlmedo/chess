@@ -1,11 +1,13 @@
 GEM
   specs:
+    colorize (0.8.1)
     msgpack (1.5.1)
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  colorize
   msgpack
 
 BUNDLED WITH

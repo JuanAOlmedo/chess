@@ -69,13 +69,18 @@ class Board
         column_7[7].change_piece Rook.new(:black)
     end
 
-    def show
+    def show(highlight: [])
         position = [0, 7]
 
         puts '  A B C D E F G H'
         print '1 '
         64.times do
-            print "#{find(position).piece.show} "
+            str = if highlight.include?(position) 
+                "#{find(position).piece.show_highlighted} "
+            else
+                "#{find(position).piece.show} "
+            end
+            print str
 
             if position[0] < 7
                 position[0] += 1
@@ -86,6 +91,15 @@ class Board
                 print "#{8 - position[1]} " unless position[1] == -1
             end
         end
+    end
+
+    def show_possible(current_color, position)
+        possible = @positions.select do |position2|
+            movement = Movement.from_positions position, position2
+            check_valid(current_color, position, position2, movement)[0]
+        end
+        
+        show highlight: possible.map(&:to_a)
     end
 
     def move(current_color, position, position2)
@@ -119,7 +133,7 @@ class Board
             return false, 'There are pieces inbetween'
         end
 
-        true
+        return true, ''
     end
 
     def save

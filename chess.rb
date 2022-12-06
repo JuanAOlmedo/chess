@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'colorize'
 require 'msgpack'
 require './board'
 require './empty'
@@ -23,9 +24,11 @@ class Game
 
             puts "#{current_color.capitalize} turn"
             loop do
-                position, position2 = gets.chomp.split(' ').map do |string|
-                    board.find human_to_position(string.split(':'))
-                end
+                position = ask_position
+
+                board.show_possible current_color, position
+
+                position2 = ask_position
 
                 moved, reason = board.move current_color, position, position2
                 break if moved
@@ -58,8 +61,9 @@ class Game
     end
 
     def save_to_file
-        file = File.open('data', 'w')
-        file.write save.to_msgpack
+        File.open('data', 'w') do |file|
+            file.write save.to_msgpack
+        end
     end
 
     def self.load(game)
@@ -71,8 +75,9 @@ class Game
     end
 
     def self.load_from_file
-        file = File.open('data', 'r')
-        self.load MessagePack.load(file.read)
+        File.open('data', 'r') do |file|
+            self.load MessagePack.load(file.read)
+        end
     end
 
     def self.safe_load_from_file
@@ -84,10 +89,25 @@ class Game
 
     private
 
+    def ask_position
+        loop do
+            break board.find human_to_position(gets.chomp.split(':'))
+        rescue
+            puts 'Incorrect input'
+        end
+    end
+
     def show_win_message
         puts "#{board.white_king ? 'White' : 'Black'} wins!!"
     end
 end
+
+puts '----- CHESS ------'
+puts 'Syntax:'
+puts 'From     To:'
+puts 'A:1      B:2'
+puts 'Example: A:1 B:2'
+puts ''
 
 game = Game.safe_load_from_file || Game.new
 

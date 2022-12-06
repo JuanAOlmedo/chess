@@ -10,7 +10,17 @@ class Movement
     end
 
     def valid?
-        piece.movement_map.include? self
+        if piece.is_a?(Pawn) || piece.is_a?(UnmovedPawn)
+            position2 = piece.position.board.find([piece.position.x + x, piece.position.y + y]).empty?
+
+            if piece.kill_movement_map.include? self
+                !position2
+            elsif piece.movement_map.include? self
+                position2
+            end
+        else
+            piece.movement_map.include? self
+        end
     end
 
     def colinear?(movement)
@@ -18,7 +28,7 @@ class Movement
     end
 
     def equal?(other)
-        other.to_a == (piece.color == :black ? to_a.map(&:abs) : to_a)
+        other.to_a == (piece.color == :black ? to_a.map { |c| c * -1 } : to_a)
     end
 
     def to_a
@@ -27,5 +37,9 @@ class Movement
 
     def inspect
         "In direction:  X: #{x}, Y: #{y}"
+    end
+
+    def self.from_positions(position, position2)
+        Movement.new position2.x - position.x, position2.y - position.y, position.piece
     end
 end

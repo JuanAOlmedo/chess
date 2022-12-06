@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class Empty
+    def show_highlighted
+        '*'
+    end
+
     def show
         ' '
     end
