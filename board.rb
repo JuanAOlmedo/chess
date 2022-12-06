@@ -9,11 +9,7 @@ class Board
     end
 
     def select_column(x: nil, y: nil)
-        if x
-            @positions.select { |position| position.x == x }
-        else
-            @positions.select { |position| position.y == y }
-        end
+        @positions.select { |position| x ? position.x == x : position.y == y }
     end
 
     def find(array)
@@ -25,11 +21,11 @@ class Board
     end
 
     def black_king
-        kings.find { |piece| piece.color == :black }
+        kings.find { |king| king.color == :black }
     end
 
     def white_king
-        kings.find { |piece| piece.color == :white }
+        kings.find { |king| king.color == :white }
     end
 
     def build_empty
@@ -103,7 +99,7 @@ class Board
     end
 
     def move(current_color, position, position2)
-        movement = Movement.new position2.x - position.x, position2.y - position.y, position.piece
+        movement = Movement.from_positions position, position2
 
         valid, reason = check_valid(current_color, position, position2, movement)
         return false, reason unless valid

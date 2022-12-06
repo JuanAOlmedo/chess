@@ -9,6 +9,7 @@ require './movement'
 require './path'
 require './pieces'
 require './position'
+
 class Game
     attr_accessor :board, :current_color
 
@@ -79,14 +80,14 @@ class Game
         g
     end
 
-    def self.load_from_file
-        File.open('data', 'r') do |file|
+    def self.load_from_file(filename)
+        File.open(filename, 'r') do |file|
             self.load MessagePack.load(file.read)
         end
     end
 
-    def self.safe_load_from_file
-        game = load_from_file
+    def self.safe_load_from_file(filename)
+        game = load_from_file(filename)
         return game unless game.win
     rescue StandardError
         false
@@ -118,6 +119,6 @@ puts 'A:1      B:2'
 puts 'Example: A:1 B:2'
 puts ''
 
-game = Game.load_from_file || Game.new
+game = Game.load_from_file('data') || Game.new
 
 game.play
