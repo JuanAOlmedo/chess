@@ -118,6 +118,6 @@ puts 'A:1      B:2'
 puts 'Example: A:1 B:2'
 puts ''
 
-game = Game.safe_load_from_file || Game.new
+game = Game.load_from_file || Game.new
 
 game.play
