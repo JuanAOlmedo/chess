@@ -9,7 +9,6 @@ require './movement'
 require './path'
 require './pieces'
 require './position'
-
 class Game
     attr_accessor :board, :current_color
 
@@ -28,12 +27,18 @@ class Game
 
                 board.show_possible current_color, position
 
-                position2 = ask_position
+                position2 = loop do
+                    break board.find human_to_position(gets.chomp.split(':'))
+                rescue StandardError
+                    puts 'Invalid input'
+                end
 
                 moved, reason = board.move current_color, position, position2
                 break if moved
 
+                board.show
                 puts "Incorrect input: #{reason}"
+                puts 'Please choose again'
             end
 
             @current_color = current_color == :white ? :black : :white
@@ -91,9 +96,13 @@ class Game
 
     def ask_position
         loop do
-            break board.find human_to_position(gets.chomp.split(':'))
-        rescue
-            puts 'Incorrect input'
+            position = board.find human_to_position(gets.chomp.split(':'))
+
+            break position if board.selectable_position? position, current_color
+
+            puts 'Not your piece!'
+        rescue StandardError
+            puts 'Invalid input'
         end
     end
 

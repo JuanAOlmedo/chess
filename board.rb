@@ -75,11 +75,11 @@ class Board
         puts '  A B C D E F G H'
         print '1 '
         64.times do
-            str = if highlight.include?(position) 
-                "#{find(position).piece.show_highlighted} "
-            else
-                "#{find(position).piece.show} "
-            end
+            str = if highlight.include?(position)
+                      "#{find(position).piece.show_highlighted} "
+                  else
+                      "#{find(position).piece.show} "
+                  end
             print str
 
             if position[0] < 7
@@ -98,7 +98,7 @@ class Board
             movement = Movement.from_positions position, position2
             check_valid(current_color, position, position2, movement)[0]
         end
-        
+
         show highlight: possible.map(&:to_a)
     end
 
@@ -118,8 +118,14 @@ class Board
         true
     end
 
+    def selectable_position?(position, current_color)
+        position.piece.color == current_color
+    end
+
     def check_valid(current_color, position, position2, movement)
-        return false, 'Not your piece!' if position.piece.color != current_color
+        return false, 'Not your piece!' unless selectable_position? position, current_color
+
+        return false, 'Invalid movement' unless movement.valid?
 
         return false, 'You cannot eat your own pieces!' if position2.piece.color == current_color
 
@@ -127,13 +133,11 @@ class Board
             return false, 'You cannot move the piece outisde the board'
         end
 
-        return false, 'Invalid movement' unless movement.valid?
-
         if Path.new(position, position2, movement).positions.any? { |p| !find(p).empty? }
             return false, 'There are pieces inbetween'
         end
 
-        return true, ''
+        [true, '']
     end
 
     def save

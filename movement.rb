@@ -11,7 +11,8 @@ class Movement
 
     def valid?
         if piece.is_a?(Pawn) || piece.is_a?(UnmovedPawn)
-            position2 = piece.position.board.find([piece.position.x + x, piece.position.y + y]).empty?
+            position2 = piece.position.board.find([piece.position.x + x,
+                                                   piece.position.y + y]).empty?
 
             if piece.kill_movement_map.include? self
                 !position2

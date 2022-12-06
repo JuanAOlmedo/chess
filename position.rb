@@ -2,6 +2,7 @@
 
 class Position
     attr_accessor :x, :y, :board, :piece
+
     def initialize(x, y, board, piece: nil)
         @x = x
         @y = y
@@ -28,7 +29,6 @@ class Position
 
     def self.load(position, board)
         Position.new(position[0], position[1], board).change_piece Piece.load(position[2])
-
     end
 
     def inspect
