@@ -1,4 +1,6 @@
 # frozen_string_literal: true
 
-gem 'colorize'
+source 'https://rubygems.org'
+
+gem 'curses'
 gem 'msgpack'

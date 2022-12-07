@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'colorize'
+require 'curses'
 require 'msgpack'
 require './vector'
 require './board'
@@ -12,37 +12,37 @@ require './pieces'
 require './position'
 
 class Game
-    attr_accessor :board, :current_color
-
-    def initialize
+    attr_accessor :board, :window, :current_color
+    def initialize(window)
+        @window = window
         @current_color = :white
     end
 
     def play
         until win
-            board.display
+            window.clear
+            window.addstr board.board
+            window.addstr "#{current_color.capitalize} turn\n"
 
-            puts "#{current_color.capitalize} turn"
             loop do
                 position = ask_position
 
-                board.display highlight: position.piece.possible
+                board.highlight position.piece.possible, window
 
                 position2 = ask_position2
 
-                moved, reason = board.move current_color, position, position2
-                break if moved
+                break if board.move current_color, position, position2
 
-                board.show
-                puts "Incorrect input: #{reason}"
-                puts 'Please choose again'
+                window.clear
+                window.addstr board.board
+                window.addstr "Invalid movement\nPlease choose\nagain"
             end
 
             @current_color = current_color == :white ? :black : :white
             save_to_file 'autosave'
         end
 
-        puts "#{board.white_king ? 'White' : 'Black'} wins!!"
+        window.addstr "#{board.white_king ? 'White' : 'Black'} wins!!"
     end
 
     def win
@@ -54,48 +54,53 @@ class Game
     end
 
     def save_to_file(filename)
-        File.open(filename, 'w') do |file|
-            file.write save.to_msgpack
-        end
+        File.open(filename, 'w') { |f| f.write save.to_msgpack }
     end
 
-    def self.load(game)
-        g = Game.new
+    def self.load(game, window)
+        g = Game.new(window)
         g.board = Board.load game['board']
         g.current_color = game['color'].to_sym
 
         g unless g.win
     end
 
-    def self.load_from_file(filename)
-        File.open(filename, 'r') do |file|
-            self.load MessagePack.load(file.read)
-        end
-    rescue StandardError
-        false
+    def self.load_from_file(filename, window)
+        File.open(filename, 'r') { |f| self.load MessagePack.load(f.read), window }
     end
 
     private
 
     def ask_position
-        print 'Select: '
+        window.setpos(13, 0)
         loop do
-            position = board.find human_to_position(gets.chomp.split(':'))
+            window.deleteln
+            window.addstr 'Select: '
+
+            position = board.find human_to_position(window.getstr.split(':'))
 
             break position if position.piece.color == current_color
 
-            puts 'Not your piece!'
+            window.setpos(13, 0)
+            window.addstr "Not your piece!\n"
         rescue StandardError
-            puts 'Invalid input'
+            window.setpos(13, 0)
+            window.addstr "Invalid input\n"
         end
     end
 
     def ask_position2
-        print 'Move: '
+        window.setpos(13, 0)
         loop do
-            break board.find human_to_position(gets.chomp.split(':'))
+            window.deleteln
+            window.addstr 'Move: '
+
+            break board.find human_to_position(window.getstr.split(':'))
+
+            window.setpos(13, 0)
         rescue StandardError
-            puts 'Invalid input'
+            window.setpos(13, 0)
+            window.addstr "Invalid input\n"
         end
     end
 
@@ -103,17 +108,24 @@ class Game
     def human_to_position(human)
         alphabet = %w[A B C D E F G H]
 
-        human[0] = alphabet.index human[0].upcase
-        human[1] = 8 - human[1].to_i
-
-        human
+        [alphabet.index(human[0].upcase), 8 - human[1].to_i]
     end
 end
 
-puts '----- CHESS ------'
-puts 'Syntax:    A:2 e:8'
-puts ''
+Curses.init_screen
 
-game = Game.load_from_file('autosave') || Game.load_from_file('empty_board')
+width = 18
+height = 12
+top = (Curses.lines - height) / 2
+left = (Curses.cols - width) / 2
 
+window = Curses::Window.new(0, 0, 0, 0)
+chess = window.subwin 0, width, 0, left
+chess << "----- CHESS ------\n"
+chess << "Syntax:    A:2 e:8\n"
+chess.refresh
+
+game_win = window.subwin(0, width, 5, left)
+
+game = Game.load_from_file('autosave', game_win) || Game.load_from_file('empty_board', game_win)
 game.play

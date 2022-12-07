@@ -9,7 +9,7 @@ class Piece
     end
 
     def show_highlighted
-        show.red
+        show
     end
 
     def possible
@@ -109,7 +109,9 @@ class Pawn < Piece
             position.board.find(position2)&.piece&.color == (@color == :white ? :black : :white)
         end
 
-        possible + movement_map.calculate_possible
+        possible + movement_map.calculate_possible.select do |position2|
+            position.board.find(position2)&.empty?
+        end
     end
 
     def show

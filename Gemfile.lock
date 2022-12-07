@@ -1,6 +1,8 @@
 GEM
+  remote: https://rubygems.org/
   specs:
     colorize (0.8.1)
+    curses (1.4.4)
     msgpack (1.5.1)
 
 PLATFORMS
@@ -8,6 +10,7 @@ PLATFORMS
 
 DEPENDENCIES
   colorize
+  curses
   msgpack
 
 BUNDLED WITH

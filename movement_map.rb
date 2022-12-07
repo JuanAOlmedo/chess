@@ -45,9 +45,10 @@ class MovementMap
     # If infinite is false, get all the positions that are not occupied by the same
     # color as an array.
     def calculate_possible_for_non_infinite
-        map.map do |movement|
-            position = piece.position + movement
-            piece.position.board.find(position)&.piece&.color != piece.color ? position : []
+        map.reduce([]) do |possible, movement|
+            position = piece.position.board.find piece.position + movement
+            possible << position.to_a if position && position.piece.color != piece.color
+            possible
         end
     end
 

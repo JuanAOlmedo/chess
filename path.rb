@@ -14,7 +14,8 @@ class Path
     end
 
     def calculate_positions
-        return if movement == [0, 0] || (@movement_abs.uniq.length != 2 && !movement.include?(0))
+        return if movement == [0, 0]
+        return unless @movement_abs[0] == @movement_abs[1] || movement.include?(0)
 
         max = @movement_abs.max
         minimized_movement = movement.map { |coords| coords / max }
