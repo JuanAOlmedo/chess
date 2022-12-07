@@ -13,8 +13,7 @@ require './position'
 class Game
     attr_accessor :board, :current_color
 
-    def initialize(skip_board: false)
-        @board = Board.new unless skip_board
+    def initialize
         @current_color = :white
     end
 
@@ -26,7 +25,7 @@ class Game
             loop do
                 position = ask_position
 
-                board.show_possible current_color, position
+                board.show highlight: position.piece.possible
 
                 position2 = loop do
                     break board.find human_to_position(gets.chomp.split(':'))
@@ -43,7 +42,7 @@ class Game
             end
 
             @current_color = current_color == :white ? :black : :white
-            save_to_file
+            save_to_file 'data'
         end
 
         show_win_message
@@ -66,29 +65,24 @@ class Game
         { board: board.save, color: current_color }
     end
 
-    def save_to_file
-        File.open('data', 'w') do |file|
+    def save_to_file(filename)
+        File.open(filename, 'w') do |file|
             file.write save.to_msgpack
         end
     end
 
     def self.load(game)
-        g = Game.new skip_board: true
+        g = Game.new
         g.board = Board.load game['board']
         g.current_color = game['color'].to_sym
 
-        g
+        g unless g.win
     end
 
     def self.load_from_file(filename)
         File.open(filename, 'r') do |file|
             self.load MessagePack.load(file.read)
         end
-    end
-
-    def self.safe_load_from_file(filename)
-        game = load_from_file(filename)
-        return game unless game.win
     rescue StandardError
         false
     end
@@ -119,6 +113,6 @@ puts 'A:1      B:2'
 puts 'Example: A:1 B:2'
 puts ''
 
-game = Game.load_from_file('data') || Game.new
+game = Game.load_from_file('data') || Game.load_from_file('empty_board')
 
 game.play

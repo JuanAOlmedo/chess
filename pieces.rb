@@ -8,6 +8,10 @@ class Piece
         show.red
     end
 
+    def possible
+        movement_map.calculate_possible
+    end
+
     def save
         [self.class.name, color]
     end
@@ -100,11 +104,27 @@ class Pawn < Piece
 
     def initialize(color)
         @color = color
-        @movement_map = MovementMap.new([[0, 1]], false, self)
+        @movement_map = MovementMap.new([[0, color == :white ? 1 : -1]], false, self)
     end
 
     def kill_movement_map
-        MovementMap.new([[1, 1], [-1, 1]], false, self)
+        if @color == :white
+            MovementMap.new([[1, 1], [-1, 1]], false, self)
+        else
+            MovementMap.new([[1, -1], [-1, -1]], false, self)
+        end
+    end
+
+    def possible
+        possible = kill_movement_map.map.map do |movement|
+            [position.x + movement.x, position.y + movement.y]
+        end
+
+        possible.select! do |position2|
+            position.board.find(position2)&.piece&.color == (@color == :white ? :black : :white)
+        end
+
+        possible + movement_map.calculate_possible
     end
 
     def show
@@ -115,6 +135,10 @@ end
 class UnmovedPawn < Pawn
     def initialize(color)
         @color = color
-        @movement_map = MovementMap.new([[0, 1], [0, 2]], false, self)
+        @movement_map = if color == :white
+                            MovementMap.new([[0, 1], [0, 2]], false, self)
+                        else
+                            MovementMap.new([[0, -1], [0, -2]], false, self)
+                        end
     end
 end

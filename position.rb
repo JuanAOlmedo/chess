@@ -12,7 +12,8 @@ class Position
 
     def change_piece(piece)
         @piece = piece
-        @piece.position = self end
+        @piece.position = self
+    end
 
     def empty?
         piece.is_a? Empty
@@ -28,7 +29,7 @@ class Position
 
     def self.load(array, board)
         position = Position.new(array[0], array[1], board, piece: Empty.new)
-        position.change_piece Piece.load(array[2]) unless array[2][0] == "Empty"
+        position.change_piece Piece.load(array[2]) unless array[2][0] == 'Empty'
         position
     end
 
