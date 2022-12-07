@@ -10,6 +10,10 @@ class Movement
         @piece = piece
     end
 
+    def *(n)
+        [x * n, y * n]
+    end
+
     def to_a
         [x, y]
     end
@@ -19,6 +23,7 @@ class Movement
     end
 
     def self.from_positions(position, position2)
-        Movement.new position2.x - position.x, position2.y - position.y, position.piece
+        movement = position2 - position
+        Movement.new movement[0], movement[1], position.piece
     end
 end

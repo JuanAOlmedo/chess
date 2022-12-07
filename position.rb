@@ -15,6 +15,14 @@ class Position
         @piece.position = self
     end
 
+    def +(other)
+        [x + other.x, y + other.y]
+    end
+
+    def -(other)
+        [x - other.x, y - other.y]
+    end
+
     def empty?
         piece.is_a? Empty
     end
