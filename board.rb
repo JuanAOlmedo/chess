@@ -3,13 +3,15 @@
 # The playing board, which holds an array of all the possible positions
 class Board
     attr_accessor :positions
+
     BOARD = "
   A B C D E F G H
 1 [0, 7] [1, 7] [2, 7] [3, 7] [4, 7] [5, 7] [6, 7] [7, 7]
 2 [0, 6] [1, 6] [2, 6] [3, 6] [4, 6] [5, 6] [6, 6] [7, 6]
 3 [0, 5] [1, 5] [2, 5] [3, 5] [4, 5] [5, 5] [6, 5] [7, 5]
 4 [0, 4] [1, 4] [2, 4] [3, 4] [4, 4] [5, 4] [6, 4] [7, 4]
-5 [0, 3] [1, 3] [2, 3] [3, 3] [4, 3] [5, 3] [6, 3] [7, 3] 6 [0, 2] [1, 2] [2, 2] [3, 2] [4, 2] [5, 2] [6, 2] [7, 2]
+5 [0, 3] [1, 3] [2, 3] [3, 3] [4, 3] [5, 3] [6, 3] [7, 3]
+6 [0, 2] [1, 2] [2, 2] [3, 2] [4, 2] [5, 2] [6, 2] [7, 2]
 7 [0, 1] [1, 1] [2, 1] [3, 1] [4, 1] [5, 1] [6, 1] [7, 1]
 8 [0, 0] [1, 0] [2, 0] [3, 0] [4, 0] [5, 0] [6, 0] [7, 0]\n"
 
@@ -19,7 +21,9 @@ class Board
 
     # Find a column or row
     def select_column(x: nil, y: nil)
-        @positions.select { |position| x ? position.x == x : position.y == y } end
+        @positions.select { |position| x ? position.x == x : position.y == y }
+    end
+
     # Find the position that matches the coordinates
     def find(array)
         @positions.find { |position| position.to_a in ^array }
@@ -37,7 +41,7 @@ class Board
         kings.find { |king| king.color == :white }
     end
 
-    def board()
+    def board
         BOARD.gsub(/\[.{4}\]/) do |position|
             find([position[1].to_i, position[4].to_i]).piece.show
         end
