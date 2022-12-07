@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Position
+    include Vector
     attr_accessor :x, :y, :board, :piece
 
     def initialize(x, y, board, piece: nil)
@@ -15,20 +16,8 @@ class Position
         @piece.position = self
     end
 
-    def +(other)
-        [x + other.x, y + other.y]
-    end
-
-    def -(other)
-        [x - other.x, y - other.y]
-    end
-
     def empty?
         piece.is_a? Empty
-    end
-
-    def to_a
-        [x, y]
     end
 
     def save

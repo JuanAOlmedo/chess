@@ -6,6 +6,7 @@ class Path
 
     def initialize(position, movement)
         @movement = movement.to_a
+        @movement_abs = @movement.map &:abs
         @position = position.to_a
         @positions = []
 
@@ -13,10 +14,9 @@ class Path
     end
 
     def calculate_positions
-        return if movement == [0, 0]
-        return unless movement[0].abs == movement[1].abs || movement.include?(0)
+        return if movement == [0, 0] || (@movement_abs.uniq.length != 2 && !movement.include?(0))
 
-        max = movement.map(&:abs).max
+        max = @movement_abs.max
         minimized_movement = movement.map { |coords| coords / max }
 
         max.times do

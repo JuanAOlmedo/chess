@@ -2,20 +2,13 @@
 
 # Serves as a 'vector' that goes from one position to the other
 class Movement
+    include Vector
     attr_reader :x, :y, :piece
 
     def initialize(x, y, piece)
         @x = x
         @y = y
         @piece = piece
-    end
-
-    def *(n)
-        [x * n, y * n]
-    end
-
-    def to_a
-        [x, y]
     end
 
     def inspect

@@ -2,6 +2,7 @@
 
 require 'colorize'
 require 'msgpack'
+require './vector'
 require './board'
 require './empty'
 require './movement_map'

@@ -10,12 +10,6 @@ class MovementMap
         @map = build_map(array)
     end
 
-    def include?(movement)
-        map.any? do |movement2|
-            infinite ? movement.colinear?(movement2) : movement.equal?(movement2)
-        end
-    end
-
     def inspect
         map.map(&:inspect).inspect
     end
