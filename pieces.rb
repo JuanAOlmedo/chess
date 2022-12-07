@@ -4,6 +4,10 @@ class Piece
     attr_accessor :position
     attr_reader :movement_map, :color
 
+    def initialize(color)
+        @color = color
+    end
+
     def show_highlighted
         show.red
     end
@@ -17,22 +21,7 @@ class Piece
     end
 
     def self.load(piece)
-        c = case piece[0]
-            when 'Queen'
-                Queen
-            when 'King'
-                King
-            when 'Rook'
-                Rook
-            when 'Bishop'
-                Bishop
-            when 'Knight'
-                Knight
-            when 'Pawn'
-                Pawn
-            when 'UnmovedPawn'
-                UnmovedPawn
-            end
+        c = Piece.subclasses.find { |s| [s.name, s.subclasses[0]&.name].include? piece[0] }
 
         c ? c.new(piece[1].to_sym) : Empty.new
     end
@@ -40,7 +29,7 @@ end
 
 class Queen < Piece
     def initialize(color)
-        @color = color
+        super
         @movement_map = MovementMap.new(
             [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]], true, self
         )
@@ -53,7 +42,7 @@ end
 
 class King < Piece
     def initialize(color)
-        @color = color
+        super
         @movement_map = MovementMap.new(
             [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]], false, self
         )
@@ -66,7 +55,7 @@ end
 
 class Rook < Piece
     def initialize(color)
-        @color = color
+        super
         @movement_map = MovementMap.new([[1, 0], [0, 1], [-1, 0], [0, -1]], true, self)
     end
 
@@ -77,7 +66,7 @@ end
 
 class Bishop < Piece
     def initialize(color)
-        @color = color
+        super
         @movement_map = MovementMap.new([[1, 1], [1, -1], [-1, 1], [-1, -1]], true, self)
     end
 
@@ -88,7 +77,7 @@ end
 
 class Knight < Piece
     def initialize(color)
-        @color = color
+        super
         @movement_map = MovementMap.new(
             [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [2, -1]], false, self
         )
@@ -103,7 +92,7 @@ class Pawn < Piece
     attr_reader :kill_movement_map
 
     def initialize(color)
-        @color = color
+        super
         @movement_map = MovementMap.new([[0, color == :white ? 1 : -1]], false, self)
     end
 
@@ -134,7 +123,7 @@ end
 
 class UnmovedPawn < Pawn
     def initialize(color)
-        @color = color
+        super
         @movement_map = if color == :white
                             MovementMap.new([[0, 1], [0, 2]], false, self)
                         else

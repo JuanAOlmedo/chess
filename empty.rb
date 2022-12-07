@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# An empty position without any pieces on it
 class Empty
     def show_highlighted
         '*'

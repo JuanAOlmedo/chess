@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Calculates all the positions between a position and a specified movement
 class Path
     attr_reader :position, :movement, :positions
 

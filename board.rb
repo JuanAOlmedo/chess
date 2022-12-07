@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# The playing board, which holds an array of all the possible positions
 class Board
     attr_accessor :positions
 
@@ -7,10 +8,12 @@ class Board
         @positions = []
     end
 
+    # Find a column or row
     def select_column(x: nil, y: nil)
         @positions.select { |position| x ? position.x == x : position.y == y }
     end
 
+    # Find the position that matches the coordinates
     def find(array)
         @positions.find { |position| position.to_a in ^array }
     end
@@ -27,7 +30,7 @@ class Board
         kings.find { |king| king.color == :white }
     end
 
-    def show(highlight: [])
+    def display(highlight: [])
         position = [0, 7]
 
         puts '  A B C D E F G H'
@@ -51,6 +54,7 @@ class Board
         end
     end
 
+    # Move a piece from one position to another if the movement is valid
     def move(current_color, position, position2)
         return false, 'You cannot eat your own pieces!' if position2.piece.color == current_color
         return false, 'Invalid movement' unless position.piece.possible.include? position2.to_a
@@ -65,16 +69,12 @@ class Board
         true
     end
 
-    def selectable_position?(position, current_color)
-        position.piece.color == current_color
-    end
-
     def save
         @positions.map(&:save)
     end
 
     def self.load(positions)
-        board = Board.new skip_build: true
+        board = Board.new
         board.positions = positions.map { |position| Position.load position, board }
 
         board

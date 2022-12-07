@@ -19,19 +19,15 @@ class Game
 
     def play
         until win
-            board.show
+            board.display
 
             puts "#{current_color.capitalize} turn"
             loop do
                 position = ask_position
 
-                board.show highlight: position.piece.possible
+                board.display highlight: position.piece.possible
 
-                position2 = loop do
-                    break board.find human_to_position(gets.chomp.split(':'))
-                rescue StandardError
-                    puts 'Invalid input'
-                end
+                position2 = ask_position2
 
                 moved, reason = board.move current_color, position, position2
                 break if moved
@@ -42,23 +38,14 @@ class Game
             end
 
             @current_color = current_color == :white ? :black : :white
-            save_to_file 'data'
+            save_to_file 'autosave'
         end
 
-        show_win_message
+        puts "#{board.white_king ? 'White' : 'Black'} wins!!"
     end
 
     def win
         !board.white_king || !board.black_king
-    end
-
-    def human_to_position(human)
-        alphabet = %w[A B C D E F G H]
-
-        human[0] = alphabet.index human[0].upcase
-        human[1] = 8 - human[1].to_i
-
-        human
     end
 
     def save
@@ -90,10 +77,11 @@ class Game
     private
 
     def ask_position
+        print 'Select: '
         loop do
             position = board.find human_to_position(gets.chomp.split(':'))
 
-            break position if board.selectable_position? position, current_color
+            break position if position.piece.color == current_color
 
             puts 'Not your piece!'
         rescue StandardError
@@ -101,18 +89,30 @@ class Game
         end
     end
 
-    def show_win_message
-        puts "#{board.white_king ? 'White' : 'Black'} wins!!"
+    def ask_position2
+        print 'Move: '
+        loop do
+            break board.find human_to_position(gets.chomp.split(':'))
+        rescue StandardError
+            puts 'Invalid input'
+        end
+    end
+
+    # Transform the position shown to the player to the positions used internally
+    def human_to_position(human)
+        alphabet = %w[A B C D E F G H]
+
+        human[0] = alphabet.index human[0].upcase
+        human[1] = 8 - human[1].to_i
+
+        human
     end
 end
 
 puts '----- CHESS ------'
-puts 'Syntax:'
-puts 'From     To:'
-puts 'A:1      B:2'
-puts 'Example: A:1 B:2'
+puts 'Syntax:    A:2 e:8'
 puts ''
 
-game = Game.load_from_file('data') || Game.load_from_file('empty_board')
+game = Game.load_from_file('autosave') || Game.load_from_file('empty_board')
 
 game.play

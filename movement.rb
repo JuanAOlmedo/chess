@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Serves as a 'vector' that goes from one position to the other
 class Movement
     attr_reader :x, :y, :piece
 

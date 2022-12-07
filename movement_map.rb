@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Holds the information 
 class MovementMap
     attr_reader :map, :infinite, :piece
 
@@ -20,7 +21,9 @@ class MovementMap
     end
 
     # If the movement map has the infinite variable assigned, calculate the biggest
-    # factor by which each possible movement can be multiplied while still ending up inside the board. Else return the movement map itself converted to array.
+    # factor by which each possible movement can be multiplied while still ending up
+    # inside the board and calculate when this movement collides with another piece.
+    # If infinite is false, get all the positions as an array.
     def calculate_possible
         unless infinite
             return map.map do |movement|
