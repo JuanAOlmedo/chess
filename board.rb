@@ -47,17 +47,6 @@ class Board
         end
     end
 
-    def highlight(highlight, window)
-        window.attrset Curses::A_BLINK
-
-        highlight.each do |to_highlight|
-            window.setpos(9 - to_highlight[1], to_highlight[0] * 2 + 2)
-            window.addstr find(to_highlight).piece.show_highlighted
-        end
-
-        window.attrset Curses::A_NORMAL
-    end
-
     # Move a piece from one position to another if the movement is valid
     def move(current_color, position, position2)
         return false if position2.piece.color == current_color

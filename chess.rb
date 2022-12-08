@@ -27,7 +27,7 @@ class Game
             loop do
                 position = ask_position
 
-                board.highlight position.piece.possible, window
+                highlight position.piece.possible
 
                 position2 = ask_position2
 
@@ -42,7 +42,9 @@ class Game
             save_to_file 'autosave'
         end
 
-        window.addstr "#{board.white_king ? 'White' : 'Black'} wins!!"
+        Curses.close_screen
+
+        puts "#{board.white_king ? 'White' : 'Black'} wins!!"
     end
 
     def win
@@ -71,13 +73,24 @@ class Game
 
     private
 
+    def highlight(highlight)
+        window.attrset Curses::A_BLINK
+
+        highlight.each do |to_highlight|
+            window.setpos(9 - to_highlight[1], to_highlight[0] * 2 + 2)
+            window.addstr board.find(to_highlight).piece.show_highlighted
+        end
+
+        window.attrset Curses::A_NORMAL
+    end
+
     def ask_position
         window.setpos(13, 0)
         loop do
             window.deleteln
             window.addstr 'Select: '
 
-            position = board.find human_to_position(window.getstr.split(':'))
+            position = board.find human_to_position(get_input.split(':'))
 
             break position if position.piece.color == current_color
 
@@ -95,13 +108,34 @@ class Game
             window.deleteln
             window.addstr 'Move: '
 
-            break board.find human_to_position(window.getstr.split(':'))
+            break board.find human_to_position(get_input.split(':'))
 
             window.setpos(13, 0)
         rescue StandardError
             window.setpos(13, 0)
             window.addstr "Invalid input\n"
         end
+    end
+
+    def get_input
+        x, y = window.curx, window.cury
+        input = []
+
+        while ch = window.get_char
+            case ch
+            when "\n"
+                break
+            when "\u007F"
+                next unless input.pop
+                window.setpos(y, window.curx - 1)
+                window.delch
+            else
+                input << ch
+                window.addch ch
+            end
+        end
+
+        input.join ''
     end
 
     # Transform the position shown to the player to the positions used internally
@@ -113,19 +147,20 @@ class Game
 end
 
 Curses.init_screen
+Curses.cbreak
+Curses.noecho
+Curses.stdscr.keypad = true
 
 width = 18
-height = 12
-top = (Curses.lines - height) / 2
 left = (Curses.cols - width) / 2
 
 window = Curses::Window.new(0, 0, 0, 0)
+
 chess = window.subwin 0, width, 0, left
-chess << "----- CHESS ------\n"
-chess << "Syntax:    A:2 e:8\n"
-chess.refresh
+chess.addstr "----- CHESS ------\nSyntax:    A:2 e:8\n"
 
 game_win = window.subwin(0, width, 5, left)
 
 game = Game.load_from_file('autosave', game_win) || Game.load_from_file('empty_board', game_win)
 game.play
+

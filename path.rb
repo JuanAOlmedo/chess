@@ -6,7 +6,7 @@ class Path
 
     def initialize(position, movement)
         @movement = movement.to_a
-        @movement_abs = @movement.map &:abs
+        @movement_abs = @movement.map(&:abs)
         @position = position.to_a
         @positions = []
 
