@@ -13,6 +13,10 @@ module Vector
         [x * other, y * other]
     end
 
+    def /(other)
+        [x / other, y / other]
+    end
+
     def to_a
         [x, y]
     end

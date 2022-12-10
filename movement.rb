@@ -3,12 +3,11 @@
 # Serves as a 'vector' that goes from one position to the other
 class Movement
     include Vector
-    attr_reader :x, :y, :piece
+    attr_reader :x, :y
 
-    def initialize(x, y, piece)
+    def initialize(x, y)
         @x = x
         @y = y
-        @piece = piece
     end
 
     def inspect
@@ -17,6 +16,6 @@ class Movement
 
     def self.from_positions(position, position2)
         movement = position2 - position
-        Movement.new movement[0], movement[1], position.piece
+        Movement.new movement[0], movement[1]
     end
 end

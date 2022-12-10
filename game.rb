@@ -59,12 +59,12 @@ class Game
         File.open(filename, 'w') { |f| f.write save.to_msgpack }
     end
 
-    def self.load(game, window)
-        g = Game.new(window)
-        g.board = Board.load game['board']
-        g.current_color = game['color'].to_sym
+    def self.load(hash, window)
+        game = Game.new(window)
+        game.board = Board.load hash['board']
+        game.current_color = hash['color'].to_sym
 
-        g unless g.win
+        game unless game.win
     end
 
     def self.load_from_file(filename, window)

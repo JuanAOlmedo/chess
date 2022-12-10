@@ -94,22 +94,22 @@ class Pawn < Piece
         @movement_map = MovementMap.new([[0, color == :white ? 1 : -1]], false, self)
     end
 
+    # Pawns can eat diagonally
     def kill_movement_map
-        if @color == :white
-            MovementMap.new([[1, 1], [-1, 1]], false, self)
-        else
-            MovementMap.new([[1, -1], [-1, -1]], false, self)
+        map = @color == :white ? [[1, 1], [-1, 1]] : [[1, -1], [-1, -1]]
+
+        map.map.each_with_object [] do |movement, possible|
+            position2 = position + Movement.new(movement[0], movement[1])
+
+            if position.board.find(position2)&.piece&.color == (color == :white ? :black : :white)
+                possible << position2
+            end
         end
     end
 
+    # Allow pawn to eat pieces diagonally but move in a straight line
     def possible
-        possible = kill_movement_map.map.map { |movement| position + movement }
-
-        possible.select! do |position2|
-            position.board.find(position2)&.piece&.color == (@color == :white ? :black : :white)
-        end
-
-        possible + movement_map.calculate_possible.select do |position2|
+        kill_movement_map + movement_map.calculate_possible.select do |position2|
             position.board.find(position2)&.empty?
         end
     end
@@ -127,5 +127,16 @@ class UnmovedPawn < Pawn
                         else
                             MovementMap.new([[0, -1], [0, -2]], false, self)
                         end
+    end
+
+    # Don't allow moving two steps forward if the position one step forward is occupied
+    def possible
+        super.select do |position2|
+            if position2 == position + movement_map.map[1]
+                position.board.find(position + movement_map.map[0]).empty?
+            else
+                true
+            end
+        end
     end
 end

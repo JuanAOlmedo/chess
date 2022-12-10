@@ -60,8 +60,6 @@ class MovementMap
     end
 
     def build_map(array)
-        array.map do |movement|
-            Movement.new(movement[0], movement[1], piece)
-        end
+        array.map { |movement| Movement.new movement[0], movement[1] }
     end
 end
