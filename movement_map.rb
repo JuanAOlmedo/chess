@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Holds the information 
+# Holds the information
 class MovementMap
     attr_reader :map, :infinite, :piece
 
@@ -38,17 +38,24 @@ class MovementMap
     private
 
     def calculate_factor(x, y, m1, m2)
-        [m2.zero? ? 10 : (m2.positive? ? 7 - y : 0 - y) / m2,
-         m1.zero? ? 10 : (m1.positive? ? 7 - x : 0 - x) / m1].min
+        [if m2.zero?
+             10
+         else
+             (m2.positive? ? 7 - y : 0 - y) / m2
+         end,
+         if m1.zero?
+             10
+         else
+             (m1.positive? ? 7 - x : 0 - x) / m1
+         end].min
     end
 
     # If infinite is false, get all the positions that are not occupied by the same
     # color as an array.
     def calculate_possible_for_non_infinite
-        map.reduce([]) do |possible, movement|
+        map.each_with_object([]) do |movement, possible|
             position = piece.position.board.find piece.position + movement
             possible << position.to_a if position && position.piece.color != piece.color
-            possible
         end
     end
 

@@ -9,8 +9,8 @@ module Vector
         [x - other.x, y - other.y]
     end
 
-    def *(n)
-        [x * n, y * n]
+    def *(other)
+        [x * other, y * other]
     end
 
     def to_a

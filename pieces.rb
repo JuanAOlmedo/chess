@@ -21,9 +21,8 @@ class Piece
     end
 
     def self.load(piece)
-        c = Piece.subclasses.append(UnmovedPawn).find { |s| s.name == piece[0] }
-
-        c ? c.new(piece[1].to_sym) : Empty.new
+        Piece.subclasses.append(UnmovedPawn).find { |c| c.name == piece[0] }
+             .new(piece[1].to_sym)
     end
 end
 
@@ -79,7 +78,8 @@ class Knight < Piece
     def initialize(color)
         super
         @movement_map = MovementMap.new(
-            [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [2, -1], [-1, 2]], false, self
+            [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [2, -1],
+             [-1, 2]], false, self
         )
     end
 
