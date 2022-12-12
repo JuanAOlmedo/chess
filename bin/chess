@@ -5,12 +5,27 @@
 require './display/curses'
 require './display/terminal'
 require './game/game'
+require 'optparse'
 
-display = if ARGV.include? '--cli'
-              TerminalDisplay.new
-          else
-              CursesDisplay.new
-          end
+display = nil
+
+OptionParser.new do |opts|
+    opts.banner = <<~BANNER
+    Usage: chess.rb [options]
+
+    Game:  Select:  Select a piece to move
+                    Examples: a7, D3, h1
+           Move:    Select a position to move the selected piece to
+                    Examples: f3, A1, h4
+
+    BANNER
+
+    opts.on('--cli', 'Run outside a curses window') do |_|
+        display = TerminalDisplay.new
+    end
+end.parse!
+
+display ||= CursesDisplay.new
 
 game = Game.load_from_file('autosave', display) || Game.load_from_file('empty_board', display)
 game.play

@@ -3,7 +3,7 @@ GEM
   specs:
     colorize (0.8.1)
     curses (1.4.4)
-    msgpack (1.5.1)
+    msgpack (1.6.0)
 
 PLATFORMS
   x86_64-linux
@@ -13,5 +13,8 @@ DEPENDENCIES
   curses
   msgpack
 
+RUBY VERSION
+   ruby 3.1.3p185
+
 BUNDLED WITH
-   2.3.5
+   2.3.26

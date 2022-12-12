@@ -40,13 +40,13 @@ class CursesDisplay
         window.attrset Curses::A_NORMAL
     end
 
-    def ask_position(prompt, error_mesage, &check)
+    def ask_position(prompt, error_mesage)
         window.setpos(13, 0)
         loop do
             window.deleteln
             window.addstr prompt
 
-            position = yield(get_input.split(''))
+            position = yield(input.split(''))
             break position if position
 
             window.setpos(13, 0)
@@ -57,10 +57,10 @@ class CursesDisplay
         end
     end
 
-    def get_input
+    def input
         input = []
 
-        while ch = window.get_char
+        while (ch = window.get_char)
             case ch
             when "\n"
                 break

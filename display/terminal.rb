@@ -11,7 +11,7 @@ class TerminalDisplay
         puts board.board_highlighted highlight
     end
 
-    def ask_position(prompt, error_mesage, &check)
+    def ask_position(prompt, error_mesage)
         loop do
             print prompt
 

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 require 'msgpack'
 require './game/vector'
 require './game/board'
