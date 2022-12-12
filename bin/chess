@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require './display/curses'
+require './display/terminal'
+require './game/game'
+
+display = if ARGV.include? '--cli'
+              TerminalDisplay.new
+          else
+              CursesDisplay.new
+          end
+
+game = Game.load_from_file('autosave', display) || Game.load_from_file('empty_board', display)
+game.play

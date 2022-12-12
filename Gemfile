@@ -4,3 +4,4 @@ source 'https://rubygems.org'
 
 gem 'curses'
 gem 'msgpack'
+gem 'colorize'

@@ -5,7 +5,6 @@ class Board
     attr_accessor :positions
 
     BOARD = <<~BOARD
-
       A B C D E F G H
     1 [0, 7] [1, 7] [2, 7] [3, 7] [4, 7] [5, 7] [6, 7] [7, 7]
     2 [0, 6] [1, 6] [2, 6] [3, 6] [4, 6] [5, 6] [6, 6] [7, 6]
@@ -43,9 +42,24 @@ class Board
         kings.find { |king| king.color == :white }
     end
 
+    # Display the board.
+    # replace each position on BOARD with the corresponding piece character
     def board
         BOARD.gsub(/\[.{4}\]/) do |position|
             find([position[1].to_i, position[4].to_i]).piece.show
+        end
+    end
+
+    # Print in red all positions contained in the highlighted array
+    def board_highlighted(highlighted)
+        BOARD.gsub(/\[.{4}\]/) do |position|
+            position = [position[1].to_i, position[4].to_i]
+
+            if highlighted.include?(position)
+                find(position).piece.show_highlighted.red
+            else
+                find(position).piece.show
+            end
         end
     end
 
