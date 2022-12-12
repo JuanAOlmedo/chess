@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require './game/vector'
+
 # Serves as a 'vector' that goes from one position to the other
 class Movement
     include Vector

@@ -2,6 +2,11 @@
 
 require 'colorize'
 
+# Used by the Game class to display the board, ask the user for input and other tasks
+# related to communicating with the user
+# 
+# Does essentially the same as curses.rb, but it displays everything with 'puts' instead
+# of creating a Curses window, which makes it easier to debug the core components
 class TerminalDisplay
     def board(board, message)
         puts board, message

@@ -1,15 +1,10 @@
 # frozen_string_literal: true
 
 require 'msgpack'
-require './game/vector'
-require './game/board'
-require './game/empty'
-require './game/movement_map'
-require './game/movement'
-require './game/path'
-require './game/pieces'
-require './game/position'
+Dir['./game/*.rb'].each { |file| require file }
+Dir['./game/pieces/*.rb'].each { |file| require file }
 
+# Controlls turns, when the game has been won, what to do on each situation
 class Game
     attr_accessor :board, :display, :current_color
 
@@ -18,6 +13,7 @@ class Game
         @current_color = :white
     end
 
+    # Main method, whith which the game is started
     def play
         until win
             display.board board.board, "#{current_color.capitalize} turn\n"

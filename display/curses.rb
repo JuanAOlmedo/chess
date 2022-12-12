@@ -2,6 +2,11 @@
 
 require 'curses'
 
+# Used by the Game class to display the board, ask the user for input and other tasks
+# related to communicating with the user
+# 
+# Does essentially the same as terminal.rb, but displays everything inside a Curses
+# window
 class CursesDisplay
     attr_reader :window
 

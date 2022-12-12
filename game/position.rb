@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require './game/vector'
+
 class Position
     include Vector
     attr_accessor :x, :y, :board, :piece
