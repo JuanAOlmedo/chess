@@ -85,6 +85,7 @@ class CursesDisplay
         input.join ''
     end
 
+    # Work in progress
     def resize
         left = (Curses.cols - 18) / 2
 

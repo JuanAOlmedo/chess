@@ -2,6 +2,7 @@
 
 require './game/pieces/piece'
 
+# A Pawn that has not been moved
 class UnmovedPawn < Pawn
     def movement_map
         if color == :white

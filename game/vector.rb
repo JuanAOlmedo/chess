@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Used by positions and movements. Defines basic operations that can be done with a
+# vector (sums with other vectors, multiplication by an integer)
 module Vector
     def +(other)
         [x + other.x, y + other.y]

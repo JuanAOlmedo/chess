@@ -2,6 +2,7 @@
 
 require './game/vector'
 
+# A position in the board with an x and y coordinate
 class Position
     include Vector
     attr_accessor :x, :y, :board, :piece
