@@ -18,7 +18,7 @@ class Game
         until win
             display.board board.board, "#{current_color.capitalize} turn\n"
 
-            loop { turn }
+            loop { break if turn == :break }
 
             @current_color = current_color == :white ? :black : :white
             save_to_file 'autosave'
@@ -70,7 +70,7 @@ class Game
             board.find human_to_position(p)
         end
 
-        break if board.move current_color, position, position2
+        return :break if board.move current_color, position, position2
 
         display.board board.board, "Invalid movement\nPlease choose\nagain"
     end
