@@ -18,22 +18,7 @@ class Game
         until win
             display.board board.board, "#{current_color.capitalize} turn\n"
 
-            loop do
-                position = display.ask_position('Select: ', 'Not your piece!') do |p|
-                    p = board.find human_to_position(p)
-                    p.piece.color == current_color ? p : nil
-                end
-
-                display.highlighted board, position.piece.possible
-
-                position2 = display.ask_position('Move: ', 'Invalid position') do |p|
-                    board.find human_to_position(p)
-                end
-
-                break if board.move current_color, position, position2
-
-                display.board board.board, "Invalid movement\nPlease choose\nagain"
-            end
+            loop { turn }
 
             @current_color = current_color == :white ? :black : :white
             save_to_file 'autosave'
@@ -69,6 +54,26 @@ class Game
     end
 
     private
+
+    def turn
+        # Ask user for a position to select
+        position = display.ask_position('Select: ', 'Not your piece!') do |p|
+            p = board.find human_to_position(p)
+            p.piece.color == current_color ? p : nil
+        end
+
+        # Highlight all possible moves for that position
+        display.highlighted board, position.piece.possible
+
+        # Ask user for a position to move to
+        position2 = display.ask_position('Move: ', 'Invalid position') do |p|
+            board.find human_to_position(p)
+        end
+
+        break if board.move current_color, position, position2
+
+        display.board board.board, "Invalid movement\nPlease choose\nagain"
+    end
 
     # Transform the position shown to the player to the positions used internally
     def human_to_position(human)
