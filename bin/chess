@@ -8,6 +8,7 @@ require './game/game'
 require 'optparse'
 
 display = nil
+file = 'autosave'
 
 OptionParser.new do |opts|
     opts.banner = <<~BANNER
@@ -23,9 +24,12 @@ OptionParser.new do |opts|
     opts.on('--cli', 'Run outside a curses window') do |_|
         display = TerminalDisplay.new
     end
+    opts.on('-n', '--new', 'Start a new game regardless of saves') do |_|
+        file = 'empty_board' 
+    end
 end.parse!
 
 display ||= CursesDisplay.new
 
-game = Game.load_from_file('autosave', display) || Game.load_from_file('empty_board', display)
+game = Game.load_from_file(file, display) || Game.load_from_file('empty_board', display)
 game.play
