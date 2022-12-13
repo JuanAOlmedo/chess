@@ -25,7 +25,7 @@ OptionParser.new do |opts|
         display = TerminalDisplay.new
     end
     opts.on('-n', '--new', 'Start a new game regardless of saves') do |_|
-        file = 'empty_board' 
+        file = 'empty_board'
     end
 end.parse!
 
