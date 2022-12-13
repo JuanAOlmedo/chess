@@ -34,6 +34,8 @@ class MovementMap
             i = positions.index { |position2| !position.board.find(position2).empty? }
             i += 1 if i && position.board.find(positions[i]).piece.color != piece.color
 
+            # Return only the positions that have no piece in them, or the ones that
+            # have a piece from the opposite color
             positions[...i]
         end
 

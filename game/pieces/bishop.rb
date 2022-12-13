@@ -3,9 +3,8 @@
 require './game/pieces/piece'
 
 class Bishop < Piece
-    def initialize(color)
-        super
-        @movement_map = MovementMap.new([[1, 1], [1, -1], [-1, 1], [-1, -1]], true, self)
+    def movement_map
+        MovementMap.new([[1, 1], [1, -1], [-1, 1], [-1, -1]], true, self)
     end
 
     def show

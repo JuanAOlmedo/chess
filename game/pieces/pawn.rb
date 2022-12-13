@@ -3,9 +3,8 @@
 require './game/pieces/piece'
 
 class Pawn < Piece
-    def initialize(color)
-        super
-        @movement_map = MovementMap.new([[0, color == :white ? 1 : -1]], false, self)
+    def movement_map
+        MovementMap.new([[0, color == :white ? 1 : -1]], false, self)
     end
 
     # Pawns can eat diagonally

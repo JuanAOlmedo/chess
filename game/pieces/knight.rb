@@ -3,9 +3,8 @@
 require './game/pieces/piece'
 
 class Knight < Piece
-    def initialize(color)
-        super
-        @movement_map = MovementMap.new(
+    def movement_map
+        MovementMap.new(
             [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [2, -1],
              [-1, 2]], false, self
         )

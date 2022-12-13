@@ -3,7 +3,7 @@
 # The Piece class is used as a base for every other piece class.
 class Piece
     attr_accessor :position
-    attr_reader :movement_map, :color
+    attr_reader :color
 
     def initialize(color)
         @color = color

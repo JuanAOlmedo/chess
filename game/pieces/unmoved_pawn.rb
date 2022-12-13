@@ -3,13 +3,12 @@
 require './game/pieces/piece'
 
 class UnmovedPawn < Pawn
-    def initialize(color)
-        super
-        @movement_map = if color == :white
-                            MovementMap.new([[0, 1], [0, 2]], false, self)
-                        else
-                            MovementMap.new([[0, -1], [0, -2]], false, self)
-                        end
+    def movement_map
+        if color == :white
+            MovementMap.new([[0, 1], [0, 2]], false, self)
+        else
+            MovementMap.new([[0, -1], [0, -2]], false, self)
+        end
     end
 
     # Don't allow moving two steps forward if the position one step forward is occupied
