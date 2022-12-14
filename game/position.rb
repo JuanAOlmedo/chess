@@ -16,6 +16,7 @@ class Position
 
     def change_piece(piece)
         @piece = piece
+        @piece.position.piece = Empty.new if @piece.position
         @piece.position = self
     end
 

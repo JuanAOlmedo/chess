@@ -20,11 +20,10 @@ module Castling
 
             # Grab the nearest rook to the king
             rooks = select_color(position2.piece.color).select { |pos| pos.piece.is_a? Rook }
-            rook = rooks.min_by { |position| (position2.x - position.x).abs }
+            rook = rooks.min_by { |pos| (position2.x - pos.x).abs }
 
             # Move that rook to one position after the king
             find(position + Movement.from_a(movement / 2)).change_piece rook.piece
-            rook.piece = Empty.new
         end
 
         true

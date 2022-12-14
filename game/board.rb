@@ -76,7 +76,6 @@ class Board
         else
             position2.change_piece position.piece
         end
-        position.piece = Empty.new
 
         true
     end
