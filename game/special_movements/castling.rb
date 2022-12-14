@@ -1,5 +1,5 @@
 module Castling
-    attr_reader :castling
+    attr_accessor :castling
 
     def initialize
         super
@@ -9,7 +9,7 @@ module Castling
     def move(color, position, position2)
         return false unless super
 
-        castling[color] = false if [King, Rook].include? position.piece.class
+        castling[color] = false if [King, Rook].include? position2.piece.class
 
         if position2.piece.is_a?(King)
             movement = Movement.from_positions(position, position2)

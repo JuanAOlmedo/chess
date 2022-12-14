@@ -20,7 +20,7 @@ class King < Piece
     end
 
     def possible
-        return super unless position.board.castling[color]
+        return super unless board.castling[color]
 
         super + castling_map.each_with_object([]) do |movement, possible|
             position2 = position + movement
