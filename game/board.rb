@@ -23,11 +23,6 @@ class Board
         @positions = []
     end
 
-    # Find a column or row
-    def select_column(x: nil, y: nil)
-        @positions.select { |position| x ? position.x == x : position.y == y }
-    end
-
     # Select all position that have a piece with a certain color
     def select_color(color)
         @positions.select { |position| position.piece.color == color }

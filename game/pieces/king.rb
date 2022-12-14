@@ -15,6 +15,7 @@ class King < Piece
         end
     end
 
+    # MovementMap for castlings
     def castling_map
         [Movement.new(2, 0), Movement.new(-2, 0)]
     end
@@ -22,10 +23,16 @@ class King < Piece
     def possible
         return super unless board.castling[color]
 
+        # If castlings are possible, return castlings alongside other possible moves
         super + castling_map.each_with_object([]) do |movement, possible|
-            position2 = position + movement
-            position3 = position + Movement.from_a(movement / 2)
-            possible << position2 if board.find(position2).empty? && !checked?(position2) && !checked?(position.to_a) && !checked?(position3)
+            positions = [position + Movement.from_a(movement / 2), position + movement]
+
+            # Check that all positions from the current position to the movement
+            # position aren't checked and are empty
+            if positions.all? { |pos| board.find(pos).empty? && !checked?(pos) } &&
+               !checked?(position.to_a)
+                possible << positions[1]
+            end
         end
     end
 
