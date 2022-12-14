@@ -16,6 +16,10 @@ class Movement
         "In direction:  X: #{x}, Y: #{y}"
     end
 
+    def self.from_a(array)
+        Movement.new array[0], array[1]
+    end
+
     def self.from_positions(position, position2)
         movement = position2 - position
         Movement.new movement[0], movement[1]

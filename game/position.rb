@@ -19,6 +19,10 @@ class Position
         @piece.position = self
     end
 
+    def in_range?(piece)
+        piece.possible.include? to_a
+    end
+
     def empty?
         piece.is_a? Empty
     end
@@ -29,7 +33,7 @@ class Position
 
     def self.load(array, board)
         position = Position.new(array[0], array[1], board, piece: Empty.new)
-        position.change_piece Piece.load(array[2]) unless array[2][0] == 'Empty'
+        position.change_piece Piece.load(array[2], board) unless array[2][0] == 'Empty'
         position
     end
 

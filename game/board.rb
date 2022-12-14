@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+require './game/special_movements/castling'
+
 # The playing board, which holds an array of all the possible positions
 class Board
+    prepend Castling
     attr_accessor :positions
 
     BOARD = <<~BOARD
@@ -23,6 +26,11 @@ class Board
     # Find a column or row
     def select_column(x: nil, y: nil)
         @positions.select { |position| x ? position.x == x : position.y == y }
+    end
+
+    # Select all position that have a piece with a certain color
+    def select_color(color)
+        @positions.select { |position| position.piece.color == color }
     end
 
     # Find the position that matches the coordinates
@@ -64,12 +72,12 @@ class Board
     end
 
     # Move a piece from one position to another if the movement is valid
-    def move(current_color, position, position2)
-        return false if position2.piece.color == current_color
+    def move(color, position, position2)
+        return false if position2.piece.color == color
         return false unless position.piece.possible.include? position2.to_a
 
         if position.piece.is_a?(UnmovedPawn)
-            position2.change_piece Pawn.new(position.piece.color)
+            position2.change_piece Pawn.new(position.piece.color, self)
         else
             position2.change_piece position.piece
         end
