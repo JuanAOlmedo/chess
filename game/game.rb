@@ -77,6 +77,6 @@ class Game
 
     # Transform the position shown to the player to the positions used internally
     def human_to_position(human)
-        [%w[A B C D E F G H].index(human[0].upcase), 8 - human[1].to_i]
+        [%w[A B C D E F G H].index(human[0].upcase), human[1].to_i - 1]
     end
 end
