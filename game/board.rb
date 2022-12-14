@@ -67,12 +67,12 @@ class Board
     end
 
     # Move a piece from one position to another if the movement is valid
-    def move(color, position, position2)
-        return false if position2.piece.color == color
+    def move(_color, position, position2)
         return false unless position.piece.possible.include? position2.to_a
 
-        if position.piece.is_a?(UnmovedPawn)
+        if position.piece.is_a? UnmovedPawn
             position2.change_piece Pawn.new(position.piece.color, self)
+            position.piece = Empty.new
         else
             position2.change_piece position.piece
         end

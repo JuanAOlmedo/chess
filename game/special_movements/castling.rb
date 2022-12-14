@@ -14,18 +14,23 @@ module Castling
         # If the King or a Rook gets moved, castlings for a color are no longer possible
         castling[color] = false if [King, Rook].include? position2.piece.class
 
-        if position2.piece.is_a?(King)
-            movement = Movement.from_positions(position, position2)
-            return true unless position2.piece.castling_map.map(&:to_a).include?(movement.to_a)
+        movement = Movement.from_positions(position, position2)
+        piece = position2.piece
 
-            # Grab the nearest rook to the king
-            rooks = select_color(position2.piece.color).select { |pos| pos.piece.is_a? Rook }
-            rook = rooks.min_by { |pos| (position2.x - pos.x).abs }
+        return true unless piece.is_a?(King) && piece.castling_map.include?(movement)
 
-            # Move that rook to one position after the king
-            find(position + Movement.from_a(movement / 2)).change_piece rook.piece
-        end
+        # Move the nearest rook to the position after the king
+        find(position + Movement.from_a(movement / 2)).change_piece nearest_rook(position2,
+                                                                                 color).piece
 
         true
+    end
+
+    private
+
+    # Grab the nearest rook to the king
+    def nearest_rook(position, color)
+        positions.select { |pos| pos.piece.color == color && pos.piece.is_a?(Rook) }
+                 .min_by { |pos| (position.x - pos.x).abs }
     end
 end

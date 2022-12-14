@@ -19,7 +19,12 @@ module Vector
         [x / other, y / other]
     end
 
+    def ==(other)
+        to_a == other.to_a
+    end
+
     def to_a
         [x, y]
     end
+    alias deconstruct to_a
 end
