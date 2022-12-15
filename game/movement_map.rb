@@ -21,13 +21,14 @@ class MovementMap
         return calculate_possible_for_non_infinite unless infinite
 
         map.map do |movement|
+            position = piece.position
             factor = calculate_factor position.x, position.y, movement.x, movement.y
 
             # movement * factor represents the biggest movement a piece can make
             # while still being on the board
             # positions are all the positions between the initial position of the piece
             # and the final position of this movement
-            positions = Path.new(piece.position, movement * factor).positions
+            positions = Path.new(position, movement * factor).positions
 
             # Calculate the first position from the path that has pieces on it
             i = positions.index { |position2| !piece.board.find(position2).empty? }
@@ -67,6 +68,6 @@ class MovementMap
     end
 
     def build_map(array)
-        array.map { |movement| Movement.new movement[0], movement[1] }
+        array.map { |movement| Movement.from_a movement }
     end
 end
