@@ -28,7 +28,7 @@ module Castling
 
     private
 
-    # Grab the nearest rook to the king
+    # Grab the nearest rook to the king, which will be used to castle
     def nearest_rook(position, color)
         positions.select { |pos| pos.piece.color == color && pos.piece.is_a?(Rook) }
                  .min_by { |pos| (position.x - pos.x).abs }
