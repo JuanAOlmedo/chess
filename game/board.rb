@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require './game/special_movements/castling'
-require './game/special_movements/en_passant'
+Dir['./game/special_movements/*.rb'].each { |file| require file }
 
 # The playing board, which holds an array of all the possible positions
 class Board
     prepend Castling
     prepend EnPassant
+    prepend Promotion
     attr_accessor :positions
 
     BOARD = <<~BOARD

@@ -20,26 +20,23 @@ class MovementMap
     def calculate_possible
         return calculate_possible_for_non_infinite unless infinite
 
-        possible = map.map do |movement|
-            position = piece.position
+        map.map do |movement|
             factor = calculate_factor position.x, position.y, movement.x, movement.y
 
             # movement * factor represents the biggest movement a piece can make
             # while still being on the board
             # positions are all the positions between the initial position of the piece
             # and the final position of this movement
-            positions = Path.new(position, movement * factor).positions
+            positions = Path.new(piece.position, movement * factor).positions
 
             # Calculate the first position from the path that has pieces on it
-            i = positions.index { |position2| !position.board.find(position2).empty? }
-            i += 1 if i && position.board.find(positions[i]).piece.color != piece.color
+            i = positions.index { |position2| !piece.board.find(position2).empty? }
+            i += 1 if i && piece.board.find(positions[i]).piece.color != piece.color
 
             # Return only the positions that have no piece in them, or the ones that
             # have a piece from the opposite color
             positions[...i]
-        end
-
-        possible.flatten 1
+        end.flatten 1
     end
 
     private
@@ -64,7 +61,7 @@ class MovementMap
     # color as an array.
     def calculate_possible_for_non_infinite
         map.each_with_object([]) do |movement, possible|
-            position = piece.position.board.find piece.position + movement
+            position = piece.board.find piece.position + movement
             possible << position.to_a if position && position.piece.color != piece.color
         end
     end
