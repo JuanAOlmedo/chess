@@ -16,7 +16,7 @@ class UnmovedPawn < Pawn
     def possible
         super.select do |position2|
             if position2 == position + movement_map.map[1]
-                position.board.find(position + movement_map.map[0]).empty?
+                board.find(position + movement_map.map[0]).empty?
             else
                 true
             end

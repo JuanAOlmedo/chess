@@ -14,7 +14,7 @@ class Pawn < Piece
     # Pawns can eat diagonally
     def kill_movement_map
         diagonals.map.each_with_object [] do |movement, possible|
-            position2 = position + Movement.new(movement[0], movement[1])
+            position2 = position + Movement.from_a(movement)
 
             if position.board.find(position2)&.piece&.color == (color == :white ? :black : :white)
                 possible << position2
