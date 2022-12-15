@@ -21,7 +21,6 @@ class Movement
     end
 
     def self.from_positions(position, position2)
-        movement = position2 - position
-        Movement.new movement[0], movement[1]
+        Movement.from_a position2 - position
     end
 end

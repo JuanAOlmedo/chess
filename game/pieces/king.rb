@@ -35,7 +35,7 @@ class King < Piece
 
     # If castlings are possible, return castlings alongside other possible moves
     def possible
-        board.castling[color] ? super + castling : castling
+        board.castling[color] ? super + castling : super
     end
 
     def show
