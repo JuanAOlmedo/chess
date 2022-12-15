@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Module for Board for performing castlings https://en.wikipedia.org/wiki/Castling
 module Castling
     attr_accessor :castling
 

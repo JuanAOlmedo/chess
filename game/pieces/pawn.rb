@@ -22,6 +22,8 @@ class Pawn < Piece
         end
     end
 
+    # Add board.en_passant to the possible movements if that position is in a
+    # diagonal to the pawn
     def en_passant
         return [] if board.en_passant.nil? || board.en_passant.empty?
 
