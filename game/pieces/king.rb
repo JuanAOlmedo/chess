@@ -20,11 +20,8 @@ class King < Piece
         [Movement.new(2, 0), Movement.new(-2, 0)]
     end
 
-    def possible
-        return super unless board.castling[color]
-
-        # If castlings are possible, return castlings alongside other possible moves
-        super + castling_map.each_with_object([]) do |movement, possible|
+    def castling
+        castling_map.each_with_object [] do |movement, possible|
             positions = [position + Movement.from_a(movement / 2), position + movement]
 
             # Check that all positions from the current position to the movement
@@ -34,6 +31,11 @@ class King < Piece
                 possible << positions[1]
             end
         end
+    end
+
+    # If castlings are possible, return castlings alongside other possible moves
+    def possible
+        board.castling[color] ? super + castling : castling
     end
 
     def show

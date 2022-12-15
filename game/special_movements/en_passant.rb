@@ -2,7 +2,7 @@
 
 # Module for Board for performing en passants https://en.wikipedia.org/wiki/En_passant
 module EnPassant
-    attr_accessor :en_passant
+    attr_reader :en_passant
 
     def move(color, position, position2)
         return false unless super
