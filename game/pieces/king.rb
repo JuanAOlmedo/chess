@@ -10,9 +10,16 @@ class King < Piece
     end
 
     def checked?(position)
-        board.select_color(color == :white ? :black : :white).any? do |position2|
-            board.find(position).in_range? position2.piece
+        position = board.find(position)
+        other_color, other_castling, initial_position = prepare_checked position
+
+        checked = board.select_color(other_color).any? do |position2|
+            position.in_range? position2.piece
         end
+
+        teardown_checked other_color, other_castling, position, initial_position
+
+        checked
     end
 
     # MovementMap for castlings
@@ -40,5 +47,22 @@ class King < Piece
 
     def show
         color == :white ? '♔' : '♚'
+    end
+
+    private
+
+    def prepare_checked(position)
+        position.piece = self
+        other_color = color == :white ? :black : :white
+        other_castling = board.castling[other_color]
+        board.castling[other_color] = false
+
+        [other_color, other_castling, self.position]
+    end
+
+    def teardown_checked(color, castling, position, initial_position)
+        board.castling[color] = castling
+        position.piece = Empty.new
+        initial_position.piece = self
     end
 end
