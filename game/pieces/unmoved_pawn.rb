@@ -15,7 +15,7 @@ class UnmovedPawn < Pawn
     # Don't allow moving two steps forward if the position one step forward is occupied
     def possible
         super.select do |position2|
-            if position2 == position + movement_map.map[1]
+            if (position2[1] - position.y).abs == 2
                 board.find(position + movement_map.map[0]).empty?
             else
                 true

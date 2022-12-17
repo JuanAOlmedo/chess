@@ -21,8 +21,7 @@ module Castling
         return true unless piece.is_a?(King) && piece.castling_map.include?(movement)
 
         # Move the nearest rook to the position after the king
-        find(position + Movement.from_a(movement / 2)).change_piece nearest_rook(position2,
-                                                                                 color).piece
+        find(position + Movement.from_a(movement / 2)).change_piece nearest_rook(position2, color)
 
         true
     end
@@ -33,5 +32,6 @@ module Castling
     def nearest_rook(position, color)
         positions.select { |pos| pos.piece.is_a?(Rook) && pos.piece.color == color }
                  .min_by { |pos| (position.x - pos.x).abs }
+                 .piece
     end
 end
