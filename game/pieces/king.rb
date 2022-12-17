@@ -29,12 +29,12 @@ class King < Piece
 
     def castling
         castling_map.each_with_object [] do |movement, possible|
-            positions = [position + Movement.from_a(movement / 2), position + movement]
+            positions = Path.new(position, movement_to_rook(movement)).positions[..-2]
 
             # Check that all positions from the current position to the movement
             # position aren't checked and are empty
-            if positions.all? { |pos| board.find(pos).empty? && !checked?(pos) } &&
-               !checked?(position.to_a)
+            if positions.all? { |pos| board.find(pos).empty? } &&
+               positions[..1].append(position.to_a).all? { |pos| !checked?(pos) }
                 possible << positions[1]
             end
         end
@@ -50,6 +50,10 @@ class King < Piece
     end
 
     private
+    
+    def movement_to_rook(movement)
+        board.nearest_rook(board.find(position + movement), color).position - position
+    end
 
     def prepare_checked(position)
         position.piece = self
