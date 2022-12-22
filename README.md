@@ -1,4 +1,6 @@
 # chess.rb
+![Screenshot from 2022-12-22 20-01-10](https://user-images.githubusercontent.com/64656937/209239501-d310d8c4-9773-440c-bce7-e031eea36688.png)
+
 
 Chess written in ruby.
 
